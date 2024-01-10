@@ -1,6 +1,7 @@
 import { post } from "./index";
 
 interface ResumeResponse {
+  name?: string; // AXIOS_ERROR
   // TODO: define response
   data: {
     message?: string;

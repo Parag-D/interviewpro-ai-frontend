@@ -5,15 +5,8 @@ const Interview = () => {
   const audio1 = "audio1";
 
   return (
-    <div>
-      {/* <h1>{question1}</h1>
-      <audio controls>
-        <source src={audio1} type="audio/mpeg" />
-      </audio>
-
-      <ScreenRecorderApp /> */}
-
-      <h1>Interview</h1>
+    <div className="px-20">
+      <h1 className="text-center text-3xl font-bold">Interview</h1>
       <ScreenRecorderApp />
     </div>
   );

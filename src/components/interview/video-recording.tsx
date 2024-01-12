@@ -3,6 +3,7 @@ import useMediaRecorder from "@wmik/use-media-recorder";
 import Player from "./player";
 import LiveStreamPreview from "./live-stream";
 import { useEffect } from "react";
+import InterviewApi from "@/api/interview";
 
 const ScreenRecorderApp = () => {
   let {
@@ -13,6 +14,7 @@ const ScreenRecorderApp = () => {
     getMediaStream,
     startRecording,
     liveStream,
+    clearMediaStream,
   } = useMediaRecorder({
     // recordScreen: true,
     blobOptions: { type: "video/webm" },
@@ -23,38 +25,19 @@ const ScreenRecorderApp = () => {
     startRecording();
   }, []);
 
-  // console.log(status);
+  function onInterviewEnd() {
+    stopRecording();
+    clearMediaStream();
+
+    // await InterviewApi.sendVideo(mediaBlob);
+  }
 
   return (
     <article>
-      {/* <h1>Screen recorder</h1> */}
-      {/* {error ? `${status} ${error.message}` : status} */}
-      <section>
-        {/* <button
-          type="button"
-          onClick={getMediaStream}
-          disabled={status === "ready"}
-        >
-          Start Video
-        </button>
-        <button
-          type="button"
-          onClick={startRecording}
-          disabled={status === "recording"}
-        >
-          Start recording
-        </button>
-        <button
-          type="button"
-          onClick={stopRecording}
-          disabled={status !== "recording"}
-        >
-          Stop recording
-        </button> */}
-      </section>
       <LiveStreamPreview
         status={status}
         stream={liveStream}
+        onInterviewEnd={onInterviewEnd}
         data={[
           {
             _id: "1",
@@ -75,6 +58,7 @@ const ScreenRecorderApp = () => {
         ]}
         timer={180}
       />
+
       {/* <Player srcBlob={mediaBlob} audio={false} /> */}
     </article>
   );

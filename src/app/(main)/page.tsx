@@ -3,6 +3,7 @@
 import ResumeApi from "@/api/resume";
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -12,6 +13,7 @@ const Dropzone = dynamic(() => import("@/components/upload/dropzone"), {
 });
 
 const HomePage = () => {
+  const router = useRouter();
   const [resumeFile, setResumeFile] = useState<File | null>(null);
 
   async function handleUploadResume() {
@@ -21,8 +23,10 @@ const HomePage = () => {
 
     try {
       const response = await ResumeApi.uploadResume(resumeFile);
-      if (response.success) {
+      if (!response.success) {
         toast.success("Resume uploaded successfully");
+        router.push("/interview/instructions");
+        return;
       }
       if (response.name === "AxiosError") {
         toast.error("Failed to upload resume");

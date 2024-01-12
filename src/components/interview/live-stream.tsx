@@ -9,11 +9,13 @@ function LiveStreamPreview({
   data,
   status,
   timer, // in seconds
+  onInterviewEnd,
 }: {
   stream: MediaStream | null;
   data: { _id: string; question: string; audio: string }[];
   status: string;
   timer: number;
+  onInterviewEnd: () => void;
 }) {
   const router = useRouter();
 
@@ -23,6 +25,8 @@ function LiveStreamPreview({
   useEffect(() => {
     if (videoPreviewRef.current && stream) {
       videoPreviewRef.current.srcObject = stream;
+    } else if (videoPreviewRef.current) {
+      videoPreviewRef.current.srcObject = null;
     }
   }, [stream]);
 
@@ -39,6 +43,8 @@ function LiveStreamPreview({
   const currentQuestion = data[currentQuestionIndex];
 
   function handleInterviewFinish() {
+    onInterviewEnd();
+    // TODO: save interview
     router.replace("/interview/finish");
   }
 

@@ -39,21 +39,34 @@ const ScreenRecorderApp = () => {
       const response = await InterviewApi.sendVideo(questionId);
 
       if (response.success) {
-        const s3Url = response.data.url;
+        const s3Url = response.data.url || "";
 
         const headers = {
-          "Content-Type": "video/mp4", // Adjust based on your video type
-          "Content-Length": mediaBlob?.size.toString(),
-          "x-amz-acl": "public-read", // Optional: Adjust based on your requirements
-          "x-amz-server-side-encryption": "AES256", // Optional: Enable server-side encryption
+          "Content-Type": "video/webm", // Adjust based on your video type
+          "Content-Length": "100" || mediaBlob?.size.toString(),
         };
 
-        if (s3Url) {
-          const res = await axios.put(s3Url, mediaBlob, {
-            headers,
+        fetch(s3Url, {
+          method: "PUT",
+          headers: headers,
+          body: mediaBlob,
+        })
+          .then((response) => {
+            console.log(response);
+            if (!response.ok) {
+              throw new Error("Failed to upload video");
+            }
+          })
+          .catch((error) => {
+            console.error("Error uploading video:", error);
           });
-          console.log(res);
-        }
+
+        // if (s3Url) {
+        //   const res = await axios.put(s3Url, mediaBlob, {
+        //     headers,
+        //   });
+        //   console.log(res);
+        // }
       }
     } catch (error) {
       console.log(error);

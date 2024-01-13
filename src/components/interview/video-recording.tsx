@@ -4,6 +4,7 @@ import Player from "./player";
 import LiveStreamPreview from "./live-stream";
 import { useEffect } from "react";
 import InterviewApi from "@/api/interview";
+import useInterviewStore from "@/store/interview";
 
 const ScreenRecorderApp = () => {
   let {
@@ -32,34 +33,19 @@ const ScreenRecorderApp = () => {
     // await InterviewApi.sendVideo(mediaBlob);
   }
 
+  const { questions } = useInterviewStore();
+
   return (
     <article>
       <LiveStreamPreview
         status={status}
         stream={liveStream}
         onInterviewEnd={onInterviewEnd}
-        data={[
-          {
-            _id: "1",
-            question:
-              "This version simulates the typing effect by gradually adding characters to the displayed message. Adjust the interval value in the setInterval function to control the speed of the typing animation.",
-            audio: "/audio/audio1.mp3",
-          },
-          {
-            _id: "2",
-            question: "What is importance of your life2?",
-            audio: "/audio/audio1.mp3",
-          },
-          {
-            _id: "3",
-            question: "What is importance of your life3?",
-            audio: "/audio/audio1.mp3",
-          },
-        ]}
-        timer={180}
+        data={questions}
+        timer={10}
       />
 
-      {/* <Player srcBlob={mediaBlob} audio={false} /> */}
+      <Player srcBlob={mediaBlob} audio={false} />
     </article>
   );
 };

@@ -1,23 +1,24 @@
+import { QuestionsArray } from "@/types/interview";
 import { post } from "./index";
 
 interface ResumeResponse {
   name?: string; // AXIOS_ERROR
   // TODO: define response
   data: {
-    message?: string;
-    resumeUrl?: string;
+    questionId: string;
+    questions: QuestionsArray;
     error?: string;
   };
   success: boolean;
 }
 
 class ResumeApi {
-  static async uploadResume(data: File): Promise<ResumeResponse> {
-    const payload = {
-      resume: data,
-    };
+  static async uploadResume(data: FormData): Promise<ResumeResponse> {
+    // const payload = {
+    //   resume: data,
+    // };
 
-    return post("/resume/upload", payload);
+    return post("/upload/resume", data);
   }
 }
 

@@ -7,13 +7,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import AuthApi from "@/api/auth";
-import { UserLoginData } from "@/interfaces/auth";
+import { UserLoginData, UserResponse } from "@/types/auth";
 import { toast } from "sonner";
+import userStore from "@/store/user";
+import { setAccessToken } from "@/helpers/token";
+import { useRouter } from "next/navigation";
 
 interface UserLoginFormProps extends HTMLAttributes<HTMLDivElement> {}
 
 export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
+
+  const { setUser, user } = userStore();
+  const [isLoading, setIsLoading] = useState(false);
+
   const [loginData, setLoginData] = useState<UserLoginData>({
     email: "",
     password: "",
@@ -40,6 +47,9 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
       const response = await AuthApi.login(loginData);
 
       if (response?.data?.token?.access_token) {
+        setUser(response.data as UserResponse);
+        setAccessToken(response.data.token.access_token);
+        router.replace("/");
         toast.success("Login successful");
       } else {
         toast.error("Please check your credentials");

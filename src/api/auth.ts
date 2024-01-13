@@ -1,8 +1,9 @@
 import { get, post } from "./index";
-import { IUser, UserLoginData, UserRegisterData } from "@/interfaces/auth";
+import { IUser, UserLoginData, UserRegisterData } from "@/types/auth";
 
 interface RegisterAndLoginResponse {
   data: {
+    _id?: string;
     name?: string;
     email?: string;
     token?: {
@@ -16,7 +17,7 @@ interface RegisterAndLoginResponse {
 
 class AuthApi {
   static async getUserProfile() {
-    return get<IUser>("/auth/profile");
+    return get<RegisterAndLoginResponse>("/auth/profile");
   }
 
   static async login(data: UserLoginData): Promise<RegisterAndLoginResponse> {

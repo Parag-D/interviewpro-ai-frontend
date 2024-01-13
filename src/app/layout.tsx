@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import { Toaster } from "@/components/ui/sonner";
+import Navbar from "@/components/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,13 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Toaster richColors />
-        <nav className="flex justify-between py-3 px-10">
-          <Link href="/">Home</Link>
-          <div className="flex gap-3">
-            <Link href="/register">Register</Link>
-            <Link href="/login">Login</Link>
-          </div>
-        </nav>
+        <Navbar />
         {children}
       </body>
     </html>

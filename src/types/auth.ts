@@ -7,3 +7,5 @@ export interface IUser {
 
 export type UserLoginData = Pick<IUser, "email" | "password">;
 export type UserRegisterData = Omit<IUser, "_id">;
+
+export type UserResponse = Omit<IUser, "password">;

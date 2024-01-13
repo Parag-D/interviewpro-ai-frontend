@@ -2,6 +2,8 @@
 
 import ResumeApi from "@/api/resume";
 import { Button } from "@/components/ui/button";
+import useInterviewStore from "@/store/interview";
+import { Loader2Icon, LoaderIcon } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -15,6 +17,9 @@ const Dropzone = dynamic(() => import("@/components/upload/dropzone"), {
 const HomePage = () => {
   const router = useRouter();
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { questions, setQuestions } = useInterviewStore();
 
   async function handleUploadResume() {
     if (!resumeFile) {
@@ -22,9 +27,14 @@ const HomePage = () => {
     }
 
     try {
-      const response = await ResumeApi.uploadResume(resumeFile);
-      if (!response.success) {
+      setIsLoading(true);
+      const formData = new FormData();
+      formData.append("resume", resumeFile);
+
+      const response = await ResumeApi.uploadResume(formData);
+      if (response.success) {
         toast.success("Resume uploaded successfully");
+        setQuestions(response.data.questions);
         router.push("/interview/instructions");
         return;
       }
@@ -34,6 +44,8 @@ const HomePage = () => {
     } catch (error) {
       console.log(error);
       toast.error("Failed to upload resume");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -55,9 +67,18 @@ const HomePage = () => {
 
       <div className="flex justify-center mt-10">
         {resumeFile && (
-          <Button onClick={handleUploadResume}>Upload Resume</Button>
+          <Button onClick={handleUploadResume} disabled={isLoading}>
+            Upload Resume
+          </Button>
         )}
       </div>
+
+      {isLoading && (
+        <div className="flex justify-center mt-10">
+          <LoaderIcon className="h-5 w-5 animate-spin mr-5" /> We are analysing
+          your resume. Please wait for few moments.
+        </div>
+      )}
     </div>
   );
 };

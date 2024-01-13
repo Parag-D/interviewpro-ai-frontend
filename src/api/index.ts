@@ -30,6 +30,7 @@ class ApiClient {
           if (token && config.headers) {
             const configHeaders = config.headers;
             configHeaders.Authorization = `Bearer ${token}`;
+            configHeaders["ngrok-skip-browser-warning"] = "69420"; // TODO: REMOVE when not using ngrok
           }
         }
 

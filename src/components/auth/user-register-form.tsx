@@ -7,8 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import AuthApi from "@/api/auth";
-import { UserRegisterData } from "@/interfaces/auth";
+import { UserRegisterData, UserResponse } from "@/types/auth";
 import { toast } from "sonner";
+import { setAccessToken } from "@/helpers/token";
+import userStore from "@/store/user";
+import { useRouter } from "next/navigation";
 
 interface UserRegisterFormProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -16,7 +19,11 @@ export function UserRegisterForm({
   className,
   ...props
 }: UserRegisterFormProps) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
+
+  const { setUser, user } = userStore();
+  const [isLoading, setIsLoading] = useState(false);
+
   const [registerData, setRegisterData] = useState<UserRegisterData>({
     name: "",
     email: "",
@@ -37,8 +44,11 @@ export function UserRegisterForm({
     try {
       const response = await AuthApi.register(registerData);
       console.log(response);
-      if (response.success === true) {
+      if (response?.data?.token?.access_token) {
+        setUser(response.data as UserResponse);
+        setAccessToken(response.data.token.access_token);
         toast.success("Registration successful");
+        router.replace("/");
       } else {
         toast.error("Please check your credentials");
       }

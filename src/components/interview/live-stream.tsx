@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import TextStreaming from "../ui/text-streaming";
 import { useRouter } from "next/navigation";
+import { QuestionsArray } from "@/types/interview";
 
 function LiveStreamPreview({
   stream,
@@ -12,7 +13,7 @@ function LiveStreamPreview({
   onInterviewEnd,
 }: {
   stream: MediaStream | null;
-  data: { _id: string; question: string; audio: string }[];
+  data: QuestionsArray;
   status: string;
   timer: number;
   onInterviewEnd: () => void;
@@ -45,7 +46,7 @@ function LiveStreamPreview({
   function handleInterviewFinish() {
     onInterviewEnd();
     // TODO: save interview
-    router.replace("/interview/finish");
+    // router.replace("/interview/finish");
   }
 
   function goToNextQuestion() {
@@ -54,8 +55,10 @@ function LiveStreamPreview({
     } else {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
       const newQuestion = data[currentQuestionIndex + 1];
-      if (audioRef.current) {
-        audioRef.current.src = newQuestion.audio;
+      console.log(audioRef?.current, newQuestion.audio_url);
+      if (audioRef?.current) {
+        audioRef.current.src = newQuestion.audio_url;
+        // audioRef.current.play();
       }
       restartTimer();
     }
@@ -97,12 +100,12 @@ function LiveStreamPreview({
           className="rounded-lg mx-auto"
         />
         <div className="text-center mt-5 flex justify-center">
-          <p className="max-w-[50%] text-left">{currentQuestion.question}</p>
+          <p className="max-w-[50%] text-left">{currentQuestion.title}</p>
           {/* <TextStreaming text={currentQuestion.question} /> */}
 
           <audio
             ref={audioRef}
-            src={currentQuestion.audio}
+            src={currentQuestion.audio_url}
             autoPlay
             onEnded={startTimer}
           />

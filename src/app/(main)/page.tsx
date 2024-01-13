@@ -19,7 +19,7 @@ const HomePage = () => {
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { questions, setQuestions } = useInterviewStore();
+  const { questions, setQuestionId, setQuestions } = useInterviewStore();
 
   async function handleUploadResume() {
     if (!resumeFile) {
@@ -34,6 +34,7 @@ const HomePage = () => {
       const response = await ResumeApi.uploadResume(formData);
       if (response.success) {
         toast.success("Resume uploaded successfully");
+        setQuestionId(response.data.questionId);
         setQuestions(response.data.questions);
         router.push("/interview/instructions");
         return;

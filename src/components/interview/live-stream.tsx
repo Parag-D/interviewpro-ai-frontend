@@ -46,7 +46,7 @@ function LiveStreamPreview({
   function handleInterviewFinish() {
     onInterviewEnd();
     // TODO: save interview
-    // router.replace("/interview/finish");
+    router.push("/interview/finish");
   }
 
   function goToNextQuestion() {
@@ -58,7 +58,7 @@ function LiveStreamPreview({
       console.log(audioRef?.current, newQuestion.audio_url);
       if (audioRef?.current) {
         audioRef.current.src = newQuestion.audio_url;
-        // audioRef.current.play();
+        audioRef.current.play();
       }
       restartTimer();
     }

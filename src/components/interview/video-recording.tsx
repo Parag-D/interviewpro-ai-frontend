@@ -5,8 +5,13 @@ import LiveStreamPreview from "./live-stream";
 import { useEffect } from "react";
 import InterviewApi from "@/api/interview";
 import useInterviewStore from "@/store/interview";
+import { toast } from "sonner";
+import { post } from "@/api";
+import axios from "axios";
 
 const ScreenRecorderApp = () => {
+  const { questionId, questions } = useInterviewStore();
+
   let {
     error,
     status,
@@ -26,14 +31,34 @@ const ScreenRecorderApp = () => {
     startRecording();
   }, []);
 
-  function onInterviewEnd() {
+  async function onInterviewEnd() {
     stopRecording();
     clearMediaStream();
 
-    // await InterviewApi.sendVideo(mediaBlob);
-  }
+    try {
+      const response = await InterviewApi.sendVideo(questionId);
 
-  const { questions } = useInterviewStore();
+      if (response.success) {
+        const s3Url = response.data.url;
+
+        const headers = {
+          "Content-Type": "video/mp4", // Adjust based on your video type
+          "Content-Length": mediaBlob?.size.toString(),
+          "x-amz-acl": "public-read", // Optional: Adjust based on your requirements
+          "x-amz-server-side-encryption": "AES256", // Optional: Enable server-side encryption
+        };
+
+        if (s3Url) {
+          const res = await axios.put(s3Url, mediaBlob, {
+            headers,
+          });
+          console.log(res);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <article>

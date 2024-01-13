@@ -1,10 +1,11 @@
-import { get } from "./index";
+import { get, post } from "./index";
 
 interface InterviewResponse {
   // TODO: define response
   data: {
     message?: string;
     error?: string;
+    url?: string;
   };
   success: boolean;
 }
@@ -12,6 +13,10 @@ interface InterviewResponse {
 class InterviewApi {
   static async getInterviewQuestions(): Promise<InterviewResponse> {
     return get("/interview/questions");
+  }
+
+  static async sendVideo(questionId: string): Promise<InterviewResponse> {
+    return post("/upload/video/" + questionId);
   }
 }
 

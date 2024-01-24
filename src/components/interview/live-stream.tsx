@@ -46,7 +46,7 @@ function LiveStreamPreview({
   function handleInterviewFinish() {
     onInterviewEnd();
     // TODO: save interview
-    router.push("/interview/finish");
+    // router.push("/interview/finish");
   }
 
   function goToNextQuestion() {

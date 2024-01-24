@@ -1,16 +1,6 @@
-const Player = ({
-  srcBlob,
-  audio,
-}: {
-  srcBlob: Blob | null;
-  audio: boolean;
-}) => {
+const Player = ({ srcBlob }: { srcBlob: Blob | null }) => {
   if (!srcBlob) {
     return null;
-  }
-
-  if (audio) {
-    return <audio src={URL.createObjectURL(srcBlob)} controls />;
   }
 
   return (

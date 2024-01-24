@@ -31,12 +31,18 @@ const ScreenRecorderApp = () => {
     startRecording();
   }, []);
 
-  async function onInterviewEnd() {
+  const onInterviewEnd = async () => {
     stopRecording();
-    clearMediaStream();
+    // clearMediaStream();
+  };
 
+  const sendVideo = async (mediaBlob: Blob) => {
     try {
       const response = await InterviewApi.sendVideo(questionId);
+      const audioBlob = new Blob([mediaBlob], { type: "audio/wav" });
+
+      // Now you can do something with the extracted audioBlob
+      console.log(audioBlob);
 
       if (response.success) {
         const s3Url = response.data.url || "";
@@ -46,32 +52,43 @@ const ScreenRecorderApp = () => {
           "Content-Length": "100" || mediaBlob?.size.toString(),
         };
 
-        fetch(s3Url, {
-          method: "PUT",
-          headers: headers,
-          body: mediaBlob,
-        })
-          .then((response) => {
-            console.log(response);
-            if (!response.ok) {
-              throw new Error("Failed to upload video");
-            }
-          })
-          .catch((error) => {
-            console.error("Error uploading video:", error);
-          });
-
-        // if (s3Url) {
-        //   const res = await axios.put(s3Url, mediaBlob, {
-        //     headers,
-        //   });
-        //   console.log(res);
-        // }
+        setTimeout(() => {
+          console.log(mediaBlob, "mediaBlob");
+          if (s3Url) {
+            fetch(s3Url, {
+              method: "PUT",
+              headers: headers,
+              body: mediaBlob,
+            })
+              .then((response) => {
+                console.log(response);
+                if (!response.ok) {
+                  throw new Error("Failed to upload video");
+                }
+              })
+              .catch((error) => {
+                console.error("Error uploading video:", error);
+              });
+          }
+        }, 1000);
+        // const res =  axios.put(s3Url, mediaBlob, {
+        //   headers,
+        // });
+        // console.log(res);
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
+
+  useEffect(() => {
+    if (status === "stopped") {
+      console.log(mediaBlob);
+      if (mediaBlob) {
+        sendVideo(mediaBlob);
+      }
+    }
+  }, [status, mediaBlob]);
 
   return (
     <article>
@@ -83,7 +100,7 @@ const ScreenRecorderApp = () => {
         timer={10}
       />
 
-      <Player srcBlob={mediaBlob} audio={false} />
+      <Player srcBlob={mediaBlob} />
     </article>
   );
 };

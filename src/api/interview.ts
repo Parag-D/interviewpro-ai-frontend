@@ -6,6 +6,7 @@ interface InterviewResponse {
     message?: string;
     error?: string;
     url?: string;
+    audio_url?: string;
   };
   success: boolean;
 }

@@ -45,7 +45,7 @@ const ScreenRecorderApp = () => {
       console.log(audioBlob);
 
       if (response.success) {
-        const s3Url = response.data.url || "";
+        const s3Url = response.data.video_url || "";
 
         const headers = {
           "Content-Type": "video/webm", // Adjust based on your video type

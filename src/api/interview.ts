@@ -5,7 +5,7 @@ interface InterviewResponse {
   data: {
     message?: string;
     error?: string;
-    url?: string;
+    video_url?: string;
     audio_url?: string;
   };
   success: boolean;

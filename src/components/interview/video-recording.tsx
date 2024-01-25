@@ -2,15 +2,13 @@
 import useMediaRecorder from "@wmik/use-media-recorder";
 import Player from "./player";
 import LiveStreamPreview from "./live-stream";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import InterviewApi from "@/api/interview";
 import useInterviewStore from "@/store/interview";
-import { toast } from "sonner";
-import { post } from "@/api";
-import axios from "axios";
 
 const ScreenRecorderApp = () => {
   const { questionId, questions } = useInterviewStore();
+  const [polling, setPolling] = useState(false);
 
   let {
     error,
@@ -81,11 +79,24 @@ const ScreenRecorderApp = () => {
     }
   };
 
+  const getAnalytics = async () => {
+    setPolling(true);
+    try {
+      const response = await InterviewApi.getAnalyticsByQuestionId(questionId);
+      console.log(response);
+
+      // setPolling(false)
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     if (status === "stopped") {
       console.log(mediaBlob);
       if (mediaBlob) {
         sendVideo(mediaBlob);
+        getAnalytics();
       }
     }
   }, [status, mediaBlob]);

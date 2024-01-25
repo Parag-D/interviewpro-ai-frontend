@@ -19,6 +19,10 @@ class InterviewApi {
   static async sendVideo(questionId: string): Promise<InterviewResponse> {
     return post("/upload/video/" + questionId);
   }
+
+  static async getAnalyticsByQuestionId(questionId: string): Promise<unknown> {
+    return post("/analysis/" + questionId);
+  }
 }
 
 export default InterviewApi;

@@ -24,9 +24,11 @@ const Finish = () => {
         and thorough evaluation.
       </p>
 
-      <Link href="/interview/report">
-        <Button>Get your Interview Report</Button>
-      </Link>
+      <div className="flex justify-center items-center mt-20">
+        <Link href="/interview/report">
+          <Button>Get your Interview Report</Button>
+        </Link>
+      </div>
     </div>
   );
 };

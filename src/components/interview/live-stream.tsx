@@ -64,8 +64,6 @@ function LiveStreamPreview({
     }
   }
 
-  //   console.log(status);
-
   if (status === "failed") {
     return (
       <div className="grid place-content-center relative">

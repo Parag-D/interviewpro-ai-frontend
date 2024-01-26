@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import React from "react";
 
 const Finish = () => {
@@ -21,6 +23,10 @@ const Finish = () => {
         problem-solving approach and thought process. We aim to provide a fair
         and thorough evaluation.
       </p>
+
+      <Link href="/interview/report">
+        <Button>Get your Interview Report</Button>
+      </Link>
     </div>
   );
 };

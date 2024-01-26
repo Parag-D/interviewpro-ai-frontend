@@ -11,6 +11,17 @@ interface InterviewResponse {
   success: boolean;
 }
 
+interface AnalysisResponse {
+  data: {
+    feedback: {
+      [key: string]: {
+        [key: string]: string;
+      };
+    };
+    success: boolean;
+  };
+}
+
 class InterviewApi {
   static async getInterviewQuestions(): Promise<InterviewResponse> {
     return get("/interview/questions");
@@ -20,7 +31,9 @@ class InterviewApi {
     return post("/upload/video/" + questionId);
   }
 
-  static async getAnalyticsByQuestionId(questionId: string): Promise<unknown> {
+  static async getAnalyticsByQuestionId(
+    questionId: string
+  ): Promise<AnalysisResponse> {
     return post("/analysis/" + questionId);
   }
 }

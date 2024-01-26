@@ -6,8 +6,10 @@ import { useEffect, useState } from "react";
 import InterviewApi from "@/api/interview";
 import useInterviewStore from "@/store/interview";
 
+const VIDEO_PROCESSING_TIME = 1.5 * 60 * 1000;
+
 const ScreenRecorderApp = () => {
-  const { questionId, questions } = useInterviewStore();
+  const { questionId, questions, setFeedback } = useInterviewStore();
   const [polling, setPolling] = useState(false);
 
   let {
@@ -60,8 +62,13 @@ const ScreenRecorderApp = () => {
             })
               .then((response) => {
                 console.log(response);
+
                 if (!response.ok) {
                   throw new Error("Failed to upload video");
+                } else {
+                  setTimeout(() => {
+                    getAnalytics();
+                  }, VIDEO_PROCESSING_TIME);
                 }
               })
               .catch((error) => {
@@ -83,9 +90,14 @@ const ScreenRecorderApp = () => {
     setPolling(true);
     try {
       const response = await InterviewApi.getAnalyticsByQuestionId(questionId);
-      console.log(response);
 
-      // setPolling(false)
+      console.log(response.data);
+
+      setFeedback(response.data.feedback);
+
+      if (response.data.success) {
+        setPolling(false);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -96,7 +108,7 @@ const ScreenRecorderApp = () => {
       console.log(mediaBlob);
       if (mediaBlob) {
         sendVideo(mediaBlob);
-        getAnalytics();
+        // getAnalytics();
       }
     }
   }, [status, mediaBlob]);
@@ -111,7 +123,7 @@ const ScreenRecorderApp = () => {
         timer={10}
       />
 
-      <Player srcBlob={mediaBlob} />
+      {/* <Player srcBlob={mediaBlob} /> */}
     </article>
   );
 };

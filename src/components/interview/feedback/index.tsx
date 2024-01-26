@@ -1,3 +1,5 @@
+import { Loader2Icon } from "lucide-react";
+
 const StrengthsComponent = ({ strengths }: { strengths: string[] }) => {
   return (
     <div className="flex flex-col space-y-5">
@@ -56,12 +58,17 @@ const OverallRatingComponent = ({ overallRating }) => {
 const Feedback = ({ feedback }) => {
   console.log(feedback);
 
-  if (!feedback) {
-    return <div className="text-center mt-5 text-2xl">No feedback yet</div>;
+  if (!Object.keys(feedback).length) {
+    return (
+      <div className="text-center mt-5 text-xl flex justify-center items-center">
+        <Loader2Icon className="w-5 h-5 animate-spin mr-2" />
+        Please wait for few minutes, we are analyzing your interview.
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col space-y-5 mx-20">
+    <div className="flex flex-col space-y-5 mx-40">
       {feedback.strengths && (
         <StrengthsComponent strengths={feedback.strengths} />
       )}

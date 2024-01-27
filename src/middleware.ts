@@ -34,6 +34,7 @@ export function middleware(request: NextRequest): NextResponse | undefined {
   if (isLoginOrRegister(request.nextUrl.pathname)) {
     const user = request.cookies.has(ACCESS_TOKEN);
     if (user) {
+      // redirect to home
       return NextResponse.redirect(new URL("/", request.url));
     }
   }

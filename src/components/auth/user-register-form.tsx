@@ -49,7 +49,8 @@ export function UserRegisterForm({
         setAccessToken(response.data.token.access_token);
         toast.success("Registration successful");
         setTimeout(() => {
-          router.replace("/");
+          // router.replace("/");
+          window.location.href = "/";
         }, 500);
       } else {
         toast.error("Please check your credentials");

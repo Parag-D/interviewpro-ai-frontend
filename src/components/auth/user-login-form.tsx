@@ -50,7 +50,8 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
         setUser(response.data as UserResponse);
         setAccessToken(response.data.token.access_token);
         setTimeout(() => {
-          router.replace("/");
+          // router.replace("/");
+          window.location.href = "/";
         }, 500);
 
         toast.success("Login successful");

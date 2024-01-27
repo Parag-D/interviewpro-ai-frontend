@@ -48,7 +48,9 @@ export function UserRegisterForm({
         setUser(response.data as UserResponse);
         setAccessToken(response.data.token.access_token);
         toast.success("Registration successful");
-        router.replace("/");
+        setTimeout(() => {
+          router.replace("/");
+        }, 500);
       } else {
         toast.error("Please check your credentials");
       }

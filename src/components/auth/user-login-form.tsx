@@ -49,7 +49,10 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
       if (response?.data?.token?.access_token) {
         setUser(response.data as UserResponse);
         setAccessToken(response.data.token.access_token);
-        router.replace("/");
+        setTimeout(() => {
+          router.replace("/");
+        }, 500);
+
         toast.success("Login successful");
       } else {
         toast.error("Please check your credentials");

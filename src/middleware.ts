@@ -10,8 +10,13 @@ const protectedRoute = [
   "/interview/finish",
 ];
 
+const isProtectedRoute = (url: string) => protectedRoute.includes(url);
+
+const isLoginOrRegister = (url: string) =>
+  url === "/login" || url === "/register";
+
 export function middleware(request: NextRequest): NextResponse | undefined {
-  if (protectedRoute.includes(request.nextUrl.pathname)) {
+  if (isProtectedRoute(request.nextUrl.pathname)) {
     const user = request.cookies.has(ACCESS_TOKEN);
     // TODO: we can verify token here
     const host = process.env.HOST;
@@ -23,6 +28,13 @@ export function middleware(request: NextRequest): NextResponse | undefined {
         )}`
       );
       return NextResponse.redirect(url);
+    }
+  }
+
+  if (isLoginOrRegister(request.nextUrl.pathname)) {
+    const user = request.cookies.has(ACCESS_TOKEN);
+    if (user) {
+      return NextResponse.redirect(new URL("/", request.url));
     }
   }
 

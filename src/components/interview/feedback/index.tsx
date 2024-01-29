@@ -19,7 +19,7 @@ const AreasForImprovementComponent = ({ areasForImprovement }) => {
     <div className="flex flex-col space-y-5">
       <h2 className="text-2xl">Areas for Improvement:</h2>
       <ul>
-        {Object.values(areasForImprovement).map((area, index) => (
+        {Object.values(areasForImprovement)?.map((area, index) => (
           // @ts-ignore
           <li key={index}>{area}</li>
         ))}
@@ -34,7 +34,7 @@ const SuggestionsComponent = ({ suggestions }) => {
     <div className="flex flex-col space-y-5">
       <h2 className="text-2xl">Suggestions:</h2>
       <ul>
-        {Object.values(suggestions).map((suggestion, index) => (
+        {Object.values(suggestions)?.map((suggestion, index) => (
           // @ts-ignore
           <li key={index}>{suggestion}</li>
         ))}
@@ -69,18 +69,18 @@ const Feedback = ({ feedback }) => {
 
   return (
     <div className="flex flex-col space-y-5 mx-40">
-      {feedback.strengths && (
+      {feedback?.strengths && (
         <StrengthsComponent strengths={feedback.strengths} />
       )}
-      {feedback.areas_for_improvement && (
+      {feedback?.areas_for_improvement && (
         <AreasForImprovementComponent
           areasForImprovement={feedback.areas_for_improvement}
         />
       )}
-      {feedback.suggestions && (
+      {feedback?.suggestions && (
         <SuggestionsComponent suggestions={feedback.suggestions} />
       )}
-      {feedback.overall_rating && (
+      {feedback?.overall_rating && (
         <OverallRatingComponent overallRating={feedback.overall_rating} />
       )}
     </div>
